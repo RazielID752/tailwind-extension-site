@@ -6,7 +6,7 @@ export function Brand() {
   return (
     <a
       href="#inicio"
-      className="brand"
+      className="inline-flex shrink-0 items-center"
       aria-label="Tailwind Inspector — início"
     >
       <Image
@@ -15,6 +15,7 @@ export function Brand() {
         width={238}
         height={46}
         priority
+        className="h-auto w-[190px] sm:w-[210px]"
       />
     </a>
   );

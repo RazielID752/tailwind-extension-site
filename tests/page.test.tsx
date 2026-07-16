@@ -2,12 +2,21 @@ import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import Home from "@/app/page";
+import { metadata } from "@/app/site-metadata";
 
 vi.mock("@/app/components/support-form", () => ({
   SupportForm: () => <form aria-label="Formulário de suporte" />,
 }));
 
 describe("Home", () => {
+  it("expõe metadata canônica do produto", () => {
+    expect(metadata.title).toBe(
+      "Tailwind Inspector — Tailwind CSS direto no Chrome DevTools",
+    );
+    expect(metadata.description).toContain("Chrome DevTools");
+    expect(metadata.openGraph).toBeDefined();
+  });
+
   it("apresenta o produto com landmarks e hierarquia semântica", () => {
     render(<Home />);
 
