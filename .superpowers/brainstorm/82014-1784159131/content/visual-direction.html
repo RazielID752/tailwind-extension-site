@@ -1,0 +1,101 @@
+<style>
+  .direction-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:22px; }
+  .direction { padding:0; overflow:hidden; border:1px solid #29313d; background:#0a0d12; }
+  .direction:hover { border-color:#22d3ee; transform:translateY(-2px); }
+  .preview { min-height:420px; color:#f8fafc; background:#07090d; font-family:Inter,system-ui,sans-serif; }
+  .browserbar { display:flex; align-items:center; gap:6px; height:28px; padding:0 10px; color:#64748b; background:#11151b; border-bottom:1px solid #222a35; font-size:8px; }
+  .dot { width:5px; height:5px; border-radius:50%; background:#334155; }
+  .mini-nav { display:flex; justify-content:space-between; align-items:center; padding:13px 16px; border-bottom:1px solid #1c2430; font-size:8px; }
+  .brand { color:#fff; font-weight:700; letter-spacing:-.02em; }
+  .cyan { color:#22d3ee; }
+  .links { color:#64748b; letter-spacing:.04em; }
+  .mini-hero { padding:30px 20px 24px; }
+  .eyebrow { color:#22d3ee; text-transform:uppercase; letter-spacing:.16em; font-size:7px; font-weight:700; }
+  .mini-hero h4 { margin:10px 0 8px; max-width:250px; color:#f8fafc; font-size:24px; line-height:1.03; letter-spacing:-.05em; }
+  .mini-hero p { margin:0; max-width:245px; color:#8491a3; font-size:9px; line-height:1.55; }
+  .cta { display:inline-flex; margin-top:15px; padding:8px 12px; border-radius:6px; background:#22d3ee; color:#071015; font-size:8px; font-weight:800; }
+  .ghost { display:inline-flex; margin:15px 0 0 6px; padding:8px 10px; color:#cbd5e1; font-size:8px; }
+  .devtools { margin:0 16px 18px; border:1px solid #273140; border-radius:8px; overflow:hidden; background:#0c1118; box-shadow:0 15px 40px rgba(8,145,178,.12); }
+  .tabs { display:flex; gap:12px; padding:8px 10px; color:#64748b; background:#121821; font-size:7px; border-bottom:1px solid #273140; }
+  .tabs strong { color:#e2e8f0; border-bottom:1px solid #22d3ee; }
+  .code { display:grid; grid-template-columns:1fr 1fr; min-height:96px; }
+  .code > div { padding:10px; color:#789; font:7px/1.7 ui-monospace,monospace; }
+  .code > div:first-child { border-right:1px solid #273140; }
+  .token { color:#67e8f9; }.violet {color:#c4b5fd}.green{color:#86efac}
+  .feature-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; border-top:1px solid #1f2937; background:#1f2937; }
+  .feature-strip span { padding:12px 8px; background:#0b0f15; color:#94a3b8; font-size:7px; text-align:center; }
+  .editorial .mini-hero { padding-top:42px; text-align:center; }
+  .editorial .mini-hero h4,.editorial .mini-hero p { margin-left:auto; margin-right:auto; }
+  .editorial .mini-hero h4 { font-size:27px; }
+  .editorial .devtools { margin-top:10px; transform:perspective(700px) rotateX(3deg); }
+  .editorial .feature-strip { margin:0 16px; border:0; background:transparent; gap:8px; }
+  .editorial .feature-strip span { border:1px solid #202937; border-radius:8px; }
+  .dense .mini-nav { background:#0e131a; }
+  .dense-wrap { display:grid; grid-template-columns:70px 1fr; min-height:390px; }
+  .rail { padding:18px 8px; border-right:1px solid #202937; color:#526071; font-size:7px; line-height:3.2; }
+  .dense .mini-hero { padding:22px 14px 15px; }
+  .dense .mini-hero h4 { font-size:20px; }
+  .dense .devtools { margin:0 10px 10px; }
+  .dense .feature-strip { grid-template-columns:repeat(2,1fr); }
+  .card-body { min-height:110px; }
+  .card-body h3 { margin-bottom:6px; }
+  @media (max-width:900px){.direction-grid{grid-template-columns:1fr}.preview{min-height:0}}
+</style>
+
+<h2>Qual direção visual combina melhor com o Tailwind Inspector?</h2>
+<p class="subtitle">As três usam a identidade escura, ciano contido e conteúdo real. Clique na opção que deve orientar a landing page.</p>
+
+<div class="direction-grid cards">
+  <div class="card direction" data-choice="precision" onclick="toggleSelect(this)">
+    <div class="card-image preview">
+      <div class="browserbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> tailwindinspector.dev</div>
+      <div class="mini-nav"><span class="brand">Tailwind <span class="cyan">Inspector</span></span><span class="links">RECURSOS · PRIVACIDADE · SUPORTE</span></div>
+      <div class="mini-hero">
+        <span class="eyebrow">Chrome DevTools, aprimorado</span>
+        <h4>Teste classes Tailwind. Veja o resultado agora.</h4>
+        <p>Ajuste qualquer elemento diretamente no painel Elements, sem interromper seu fluxo.</p>
+        <span class="cta">Adicionar ao Chrome →</span><span class="ghost">Ver como funciona</span>
+      </div>
+      <div class="devtools">
+        <div class="tabs"><strong>Tailwind Inspector</strong><span>Styles</span><span>Computed</span></div>
+        <div class="code"><div>&lt;div class=<span class="green">"flex p-4"</span>&gt;<br>&nbsp; Projeto<br>&lt;/div&gt;</div><div><span class="token">flex</span> <span class="violet">items-center</span><br><span class="token">p-4</span> <s>p-8</s><br>+ <span class="green">md:grid-cols-2</span></div></div>
+      </div>
+      <div class="feature-strip"><span>Preview imediato</span><span>Flex &amp; Grid visual</span><span>Undo &amp; Redo</span></div>
+    </div>
+    <div class="card-body"><h3>A · Precisão DevTools</h3><p>Recomendada. Hierarquia forte, demonstração técnica central e detalhes de interface que parecem parte de uma ferramenta real.</p></div>
+  </div>
+
+  <div class="card direction" data-choice="editorial" onclick="toggleSelect(this)">
+    <div class="card-image preview editorial">
+      <div class="browserbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> tailwindinspector.dev</div>
+      <div class="mini-nav"><span class="brand">Tailwind <span class="cyan">Inspector</span></span><span class="links">RECURSOS · PRIVACIDADE · SUPORTE</span></div>
+      <div class="mini-hero">
+        <span class="eyebrow">Menos alternância. Mais criação.</span>
+        <h4>Seu fluxo Tailwind, direto no navegador.</h4>
+        <p>Experimente utilitários, resolva conflitos e refine layouts sem tocar no código a cada tentativa.</p>
+        <span class="cta">Adicionar ao Chrome →</span>
+      </div>
+      <div class="devtools">
+        <div class="tabs"><strong>Tailwind Inspector</strong><span>Styles</span><span>Computed</span></div>
+        <div class="code"><div>&lt;section class=<span class="green">"grid gap-6"</span>&gt;<br>&nbsp; Conteúdo<br>&lt;/section&gt;</div><div><span class="token">grid</span> <span class="violet">lg:grid-cols-3</span><br><span class="token">gap-6</span><br>+ <span class="green">dark:bg-zinc-950</span></div></div>
+      </div>
+      <div class="feature-strip"><span>Edite ao vivo</span><span>Copie o resultado</span><span>Restaure quando quiser</span></div>
+    </div>
+    <div class="card-body"><h3>B · Produto editorial</h3><p>Mais espaçosa e centrada na mensagem. Elegante, porém menos distinta de outras landing pages de software.</p></div>
+  </div>
+
+  <div class="card direction" data-choice="command" onclick="toggleSelect(this)">
+    <div class="card-image preview dense">
+      <div class="browserbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> tailwindinspector.dev</div>
+      <div class="mini-nav"><span class="brand">TW<span class="cyan">/</span>INSPECTOR</span><span class="links">INSTALAR ↗</span></div>
+      <div class="dense-wrap">
+        <div class="rail">01 INTRO<br>02 WORKFLOW<br>03 TOOLS<br>04 PRIVACY<br>05 SUPPORT</div>
+        <div><div class="mini-hero"><span class="eyebrow">Developer utility / v1</span><h4>Inspecione. Ajuste. Continue criando.</h4><p>Controle Tailwind dentro do Chrome DevTools.</p><span class="cta">Instalar extensão</span></div>
+          <div class="devtools"><div class="tabs"><strong>Inspector</strong><span>Class list</span></div><div class="code"><div><span class="token">display</span>: grid<br><span class="token">gap</span>: 1.5rem<br><span class="token">padding</span>: 2rem</div><div><span class="green">grid</span><br><span class="violet">gap-6</span><br><span class="green">p-8</span></div></div></div>
+          <div class="feature-strip"><span>Class filter</span><span>Box model</span><span>Snippets</span><span>:hov states</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body"><h3>C · Command center</h3><p>Densa e técnica, com navegação lateral. Marcante em desktop, mas mais complexa e menos natural em telas pequenas.</p></div>
+  </div>
+</div>
