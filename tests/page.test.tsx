@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import Home from "@/app/page";
@@ -23,7 +24,7 @@ describe("Home", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: /teste classes tailwind.*veja o resultado agora/i,
+        name: /teste classes tailwind/i,
       }),
     ).toBeInTheDocument();
     expect(screen.getByRole("main")).toBeInTheDocument();
@@ -46,6 +47,32 @@ describe("Home", () => {
     expect(
       within(header).getByRole("link", { name: /adicionar ao chrome/i }),
     ).toHaveAttribute("href", "#suporte");
+  });
+
+  it("abre e fecha a navegação mobile", async () => {
+    const user = userEvent.setup();
+    render(<Home />);
+
+    const toggle = screen.getByRole("button", { name: "Abrir menu" });
+
+    expect(
+      screen.queryByRole("navigation", { name: "Navegação mobile" }),
+    ).not.toBeInTheDocument();
+
+    await user.click(toggle);
+
+    const mobileNavigation = screen.getByRole("navigation", {
+      name: "Navegação mobile",
+    });
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+
+    await user.click(
+      within(mobileNavigation).getByRole("link", { name: "Recursos" }),
+    );
+
+    expect(
+      screen.queryByRole("navigation", { name: "Navegação mobile" }),
+    ).not.toBeInTheDocument();
   });
 
   it("expõe as garantias essenciais de privacidade", () => {

@@ -5,6 +5,17 @@ import { describe, expect, it, vi } from "vitest";
 import { SupportForm } from "@/app/components/support-form";
 import type { SupportActionState } from "@/app/support/support-state";
 
+async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
+  await user.type(screen.getByLabelText("Nome"), "Marcos Silva");
+  await user.type(screen.getByLabelText("E-mail"), "marcos@example.com");
+  await user.type(screen.getByLabelText("Assunto"), "Dúvida sobre a extensão");
+  await user.selectOptions(screen.getByLabelText("Categoria"), "question");
+  await user.type(
+    screen.getByLabelText("Mensagem"),
+    "Preciso de ajuda para configurar a extensão no Chrome.",
+  );
+}
+
 describe("SupportForm", () => {
   it("renderiza todos os campos visíveis com rótulos acessíveis", () => {
     render(<SupportForm />);
@@ -25,6 +36,8 @@ describe("SupportForm", () => {
     }));
     render(<SupportForm action={action} />);
 
+    await fillValidForm(user);
+
     await user.click(
       screen.getByRole("button", { name: "Enviar solicitação" }),
     );
@@ -35,6 +48,22 @@ describe("SupportForm", () => {
     );
   });
 
+  it("valida com Zod no cliente antes de executar a ação", async () => {
+    const user = userEvent.setup();
+    const action = vi.fn(async (): Promise<SupportActionState> => ({
+      status: "success",
+      message: "Não deveria enviar.",
+    }));
+    render(<SupportForm action={action} />);
+
+    await user.click(
+      screen.getByRole("button", { name: "Enviar solicitação" }),
+    );
+
+    expect(await screen.findByText("Informe seu nome.")).toBeVisible();
+    expect(action).not.toHaveBeenCalled();
+  });
+
   it("anuncia o feedback de sucesso", async () => {
     const user = userEvent.setup();
     const action = vi.fn(async (): Promise<SupportActionState> => ({
@@ -42,6 +71,8 @@ describe("SupportForm", () => {
       message: "Solicitação enviada.",
     }));
     render(<SupportForm action={action} />);
+
+    await fillValidForm(user);
 
     await user.click(
       screen.getByRole("button", { name: "Enviar solicitação" }),
@@ -62,6 +93,8 @@ describe("SupportForm", () => {
         }),
     );
     render(<SupportForm action={action} />);
+
+    await fillValidForm(user);
 
     await user.click(
       screen.getByRole("button", { name: "Enviar solicitação" }),

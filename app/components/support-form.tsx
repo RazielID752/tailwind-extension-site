@@ -1,9 +1,21 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
-import { useActionState, useEffect, useRef, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type BaseSyntheticEvent,
+  type ReactNode,
+} from "react";
+import { useForm } from "react-hook-form";
 
 import { submitSupportRequest } from "@/app/actions/support";
+import {
+  supportFormSchema,
+  type SupportFormValues,
+} from "@/app/support/support-schema";
 import {
   initialSupportState,
   type SupportActionState,
@@ -30,35 +42,73 @@ export function SupportForm({
 }: {
   action?: SupportAction;
 }) {
-  const [state, formAction, pending] = useActionState(
-    action,
-    initialSupportState,
-  );
-  const formRef = useRef<HTMLFormElement>(null);
+  const [submission, setSubmission] = useState(initialSupportState);
   const startedAtRef = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<SupportFormValues>({
+    resolver: zodResolver(supportFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
+  });
 
   useEffect(() => {
-    if (state.status === "success") {
-      formRef.current?.reset();
-    }
+    if (submission.status === "success") reset();
 
-    if (state.status === "idle" || state.status === "success") {
+    if (submission.status === "idle" || submission.status === "success") {
       startedAtRef.current?.setAttribute("value", String(Date.now()));
     }
-  }, [state.status]);
+  }, [reset, submission.status]);
 
-  const error = (field: SupportField) => state.fieldErrors?.[field]?.[0];
+  const error = (field: SupportField) =>
+    errors[field]?.message ?? submission.fieldErrors?.[field]?.[0];
+
+  const submit = async (
+    _values: SupportFormValues,
+    event?: BaseSyntheticEvent,
+  ) => {
+    const form = event?.target;
+    if (!(form instanceof HTMLFormElement)) return;
+
+    setSubmission(initialSupportState);
+
+    try {
+      const nextState = await action(submission, new FormData(form));
+      setSubmission(nextState);
+    } catch {
+      setSubmission({
+        status: "error",
+        message:
+          "Não foi possível enviar sua solicitação agora. Tente novamente em alguns instantes.",
+      });
+    }
+  };
+
   const statusColor =
-    state.status === "success"
+    submission.status === "success"
       ? "text-positive"
-      : state.status === "error"
+      : submission.status === "error"
         ? "text-rose-300"
         : "text-copy";
 
   return (
     <form
-      ref={formRef}
-      action={formAction}
+      onSubmit={handleSubmit(submit, () =>
+        setSubmission({
+          status: "error",
+          message: "Revise os campos destacados.",
+        }),
+      )}
+      onChange={() => {
+        if (submission.status !== "idle") setSubmission(initialSupportState);
+      }}
       className="relative rounded-[18px] border border-line bg-panel p-6 sm:p-9"
       noValidate
     >
@@ -81,7 +131,6 @@ export function SupportForm({
         <Field label="Nome" name="name" error={error("name")}>
           <input
             id="name"
-            name="name"
             minLength={2}
             maxLength={80}
             required
@@ -89,13 +138,13 @@ export function SupportForm({
             aria-describedby={error("name") ? "name-error" : undefined}
             aria-invalid={Boolean(error("name"))}
             className={controlClassName}
+            {...register("name")}
           />
         </Field>
 
         <Field label="E-mail" name="email" error={error("email")}>
           <input
             id="email"
-            name="email"
             type="email"
             maxLength={254}
             required
@@ -103,6 +152,7 @@ export function SupportForm({
             aria-describedby={error("email") ? "email-error" : undefined}
             aria-invalid={Boolean(error("email"))}
             className={controlClassName}
+            {...register("email")}
           />
         </Field>
       </div>
@@ -110,7 +160,6 @@ export function SupportForm({
       <Field label="Assunto" name="subject" error={error("subject")}>
         <input
           id="subject"
-          name="subject"
           minLength={5}
           maxLength={120}
           required
@@ -118,18 +167,19 @@ export function SupportForm({
           aria-describedby={error("subject") ? "subject-error" : undefined}
           aria-invalid={Boolean(error("subject"))}
           className={controlClassName}
+          {...register("subject")}
         />
       </Field>
 
       <Field label="Categoria" name="category" error={error("category")}>
         <select
           id="category"
-          name="category"
           defaultValue=""
           required
           aria-describedby={error("category") ? "category-error" : undefined}
           aria-invalid={Boolean(error("category"))}
           className={controlClassName}
+          {...register("category")}
         >
           <option value="" disabled>
             Selecione uma categoria
@@ -145,7 +195,6 @@ export function SupportForm({
       <Field label="Mensagem" name="message" error={error("message")}>
         <textarea
           id="message"
-          name="message"
           rows={6}
           minLength={20}
           maxLength={5_000}
@@ -154,6 +203,7 @@ export function SupportForm({
           aria-describedby={error("message") ? "message-error" : undefined}
           aria-invalid={Boolean(error("message"))}
           className={`${controlClassName} min-h-[150px] resize-y`}
+          {...register("message")}
         />
       </Field>
 
@@ -168,14 +218,14 @@ export function SupportForm({
           aria-live="polite"
           className={`m-0 min-h-5 text-[0.8125rem] leading-[1.55] ${statusColor}`}
         >
-          {state.message}
+          {submission.message}
         </p>
         <button
           type="submit"
-          disabled={pending}
-          className="inline-flex cursor-pointer min-h-11 items-center justify-center gap-2 rounded-lg border border-accent bg-accent px-[18px] font-bold text-[#031014] shadow-[0_10px_36px_rgb(34_211_238_/_13%)] transition hover:-translate-y-px hover:bg-accent-soft disabled:cursor-not-allowed disabled:opacity-[0.58] disabled:hover:translate-y-0"
+          disabled={isSubmitting}
+          className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border border-accent bg-accent px-[18px] font-bold text-[#031014] shadow-[0_10px_36px_rgb(34_211_238_/_13%)] transition hover:-translate-y-px hover:bg-accent-soft disabled:cursor-not-allowed disabled:opacity-[0.58] disabled:hover:translate-y-0"
         >
-          {pending ? "Enviando…" : "Enviar solicitação"}
+          {isSubmitting ? "Enviando…" : "Enviar solicitação"}
           <Send aria-hidden="true" size={17} />
         </button>
       </div>

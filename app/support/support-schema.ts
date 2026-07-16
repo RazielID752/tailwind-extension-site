@@ -37,5 +37,14 @@ export const supportRequestSchema = z
   })
   .strict();
 
+export const supportFormSchema = supportRequestSchema.pick({
+  name: true,
+  email: true,
+  subject: true,
+  category: true,
+  message: true,
+});
+
 export type SupportCategory = (typeof supportCategories)[number];
 export type SupportRequest = z.infer<typeof supportRequestSchema>;
+export type SupportFormValues = z.infer<typeof supportFormSchema>;
