@@ -27,10 +27,14 @@ export function SiteHeader() {
         <Brand />
         <nav
           aria-label="Navegação principal"
-          className="hidden items-center gap-4 text-sm text-copy lg:flex xl:gap-6 [&_a]:transition-colors [&_a:hover]:text-ink"
+          className="hidden items-center gap-4 text-sm lg:flex xl:gap-6"
         >
           {navigation.map((item) => (
-            <a key={item.href} href={item.href}>
+            <a
+              key={item.href}
+              href={item.href}
+              className="desktop-nav-link text-copy transition-colors hover:text-accent"
+            >
               {item.label}
             </a>
           ))}
@@ -64,7 +68,7 @@ export function SiteHeader() {
       {isMenuOpen ? (
         <div
           id="menu-mobile"
-          className="border-t border-line bg-page/95 px-5 py-4 shadow-[0_24px_50px_rgb(0_0_0_/_35%)] backdrop-blur-xl sm:px-6 lg:hidden"
+          className="border-t border-line bg-page/95 px-5 py-4 shadow-[0_24px_50px_rgb(0_0_0/35%)] backdrop-blur-xl sm:px-6 lg:hidden"
         >
           <nav
             aria-label="Navegação mobile"

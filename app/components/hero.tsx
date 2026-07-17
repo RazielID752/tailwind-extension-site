@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ArrowDown, Download } from "lucide-react";
 
 import { siteConfig } from "@/app/content";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -18,10 +19,10 @@ export function Hero() {
           <p className="mb-4 text-xs font-extrabold uppercase tracking-[0.15em] text-accent">
             Chrome DevTools, aprimorado
           </p>
-          <h1 className="max-w-[720px] text-balance text-[clamp(2.5rem,12vw,4.25rem)] font-bold leading-[0.98] tracking-[-0.045em] lg:text-[clamp(3.25rem,5.7vw,5.8rem)]">
-            Teste classes Tailwind.
+          <h1 className="max-w-[720px] text-balance text-[clamp(2.5rem,12vw,4.25rem)] font-bold leading-[0.98] lg:text-[clamp(3.25rem,4.7vw,4.8rem)]">
+            Teste classes <span className="text-accent font-light">Tailwind.</span>
             <br />
-            <span className="text-accent">Veja o resultado agora.</span>
+
           </h1>
           <p className="mt-7 max-w-[640px] text-[clamp(1rem,1.3vw,1.1875rem)] leading-[1.7] text-[#a5b2c3]">
             Inspecione qualquer elemento, experimente utilitários e acompanhe
@@ -29,32 +30,32 @@ export function Hero() {
             o código-fonte.
           </p>
           <div className="mt-[34px] flex flex-col items-stretch gap-[22px] sm:flex-row sm:items-center">
-            <a
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-accent bg-accent px-[18px] font-bold text-[#031014] shadow-[0_10px_36px_rgb(34_211_238_/_13%)] transition hover:-translate-y-px hover:bg-accent-soft"
+            <Link
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-accent bg-accent px-[18px] font-bold text-[#031014] shadow-[0_10px_36px_rgb(34_211_238/13%)] transition hover:-translate-y-px hover:bg-accent-soft"
               href={siteConfig.storeUrl}
             >
               <Download aria-hidden="true" size={18} />
               Adicionar ao Chrome
-            </a>
-            <a
+            </Link>
+            <Link
               className="inline-flex items-center gap-2 text-[0.9375rem] font-bold text-[#d8e1eb] transition-colors hover:text-accent"
               href="#como-funciona"
             >
               Ver como funciona
               <ArrowDown aria-hidden="true" size={16} />
-            </a>
+            </Link>
           </div>
           <p className="mt-[22px] font-mono text-xs leading-6 text-[#637387]">
             Funciona localmente. Sem analytics. Sem telemetria.
           </p>
         </div>
 
-        <div className="relative lg:-mr-[9vw]">
+        <div className="relative lg:-mr-[4vw]">
           <Image
             src={siteConfig.heroImage}
             alt="Interface do Tailwind Inspector aberta no Chrome DevTools"
-            width={1536}
-            height={1024}
+            width={900}
+            height={700}
             priority
             sizes="(max-width: 900px) 100vw, 58vw"
             className="rounded-[18px] border border-[#164e63] bg-panel shadow-[0_24px_90px_rgb(8_145_178_/_14%)]"

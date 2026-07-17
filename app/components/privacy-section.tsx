@@ -51,7 +51,7 @@ export function PrivacySection() {
             Chrome não são acessadas.
           </p>
           <p>
-            O formulário de suporte deste site envia pelo Resend apenas os
+            O formulário de suporte deste site envia apenas os
             dados que você decidir informar.
           </p>
         </div>
